@@ -19,6 +19,24 @@ provider "aws" {
 
 }
 
+provider "helm" {
+  kubernetes = {
+    host                   = data.aws_eks_cluster.main.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.main.token
+  }
+}
+
+data "aws_eks_cluster" "main" {
+  name       = module.eks.cluster_name
+  depends_on = [module.eks]
+}
+
+data "aws_eks_cluster_auth" "main" {
+  name       = module.eks.cluster_name
+  depends_on = [module.eks]
+}
+
 module "vpc" {
   source = "./modules/vpc"
 
@@ -37,4 +55,11 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.private_subnet_ids
   node_groups     = var.node_groups
+}
+
+module "ebs_csi_driver" {
+  source           = "./modules/ebs-csi"
+  cluster_name       = module.eks.cluster_name
+  oidc_provider_arn  = module.eks.oidc_provider_arn
+  oidc_provider_url  = module.eks.oidc_provider_url
 }
