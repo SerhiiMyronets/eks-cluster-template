@@ -14,19 +14,19 @@ variable "vpc_cidr" {
 variable "availability_zones" {
   description = "Availability zones"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"/*, "us-east-1c"*/] // commented for $ saving (NAT + EIP)
+  default     = ["us-east-1a", "us-east-1b" /*, "us-east-1c"*/] // commented for $ saving (NAT + EIP)
 }
 
 variable "private_subnet_cidrs" {
   description = "CIDR blocks for private subnets"
   type        = list(string)
-  default     = ["10.0.1.0/24", "10.0.2.0/24"/*, "10.0.3.0/24"*/] // commented for $ saving (NAT + EIP)
+  default     = ["10.0.1.0/24", "10.0.2.0/24" /*, "10.0.3.0/24"*/] // commented for $ saving (NAT + EIP)
 }
 
 variable "public_subnet_cidrs" {
   description = "CIDR blocks for public subnets"
   type        = list(string)
-  default     = ["10.0.4.0/24", "10.0.5.0/24"/*, "10.0.6.0/24"*/] // commented for $ saving (NAT + EIP)
+  default     = ["10.0.4.0/24", "10.0.5.0/24" /*, "10.0.6.0/24"*/] // commented for $ saving (NAT + EIP)
 }
 
 variable "cluster_name" {
@@ -41,7 +41,7 @@ variable "cluster_version" {
   default     = "1.32"
 }
 
-variable "node_groups" {
+variable "node_groups_config" {
   description = "EKS node group configuration"
   type = map(object({
     instance_types = list(string)
@@ -62,5 +62,27 @@ variable "node_groups" {
         min_size     = 1
       }
     }
+  }
+}
+
+variable "rds_config" {
+  description = "RDS configuration"
+  type = object({
+    db_name           = string
+    db_username       = string
+    engine            = string
+    engine_version    = string
+    port              = number
+    instance_class    = string
+    allocated_storage = number
+  })
+  default = {
+    db_name           = "usermgmtdb"
+    db_username       = "dbadmin"
+    engine            = "mysql"
+    engine_version    = "8.0"
+    port              = 3306
+    instance_class    = "db.t3.micro"
+    allocated_storage = 20
   }
 }

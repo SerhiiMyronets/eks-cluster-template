@@ -12,3 +12,8 @@ variable "oidc_provider_url" {
   type        = string
   description = "URL of the OIDC provider (without https://)"
 }
+
+variable "ssm_parameter_arns" {
+  description = "ARN in Parameter Store"
+  type        = list(string)
+}
