@@ -5,6 +5,12 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "domain_name" {
+  type        = string
+  description = "Domain name for certificate, e.g. example.com"
+  default     = "serhii.link"
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string

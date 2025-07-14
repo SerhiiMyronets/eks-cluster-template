@@ -51,7 +51,12 @@ module "render" {
   output_path               = "${path.module}/../02-helm-charts/values"
   ebs_irsa_arn              = module.irsa.ebs_csi_role_arn
   external_secrets_irsa_arn = module.irsa.external-secrets_role_arn
-  alb_controller_irsa_arn = module.irsa.alb-controller_role_arn
-  cluster_name = var.cluster_name
-  vpc_id = module.vpc.vpc_id
+  alb_controller_irsa_arn   = module.irsa.alb-controller_role_arn
+  cluster_name              = var.cluster_name
+  vpc_id                    = module.vpc.vpc_id
+}
+
+module "acm" {
+  source      = "./modules/acm"
+  domain_name = var.domain_name
 }

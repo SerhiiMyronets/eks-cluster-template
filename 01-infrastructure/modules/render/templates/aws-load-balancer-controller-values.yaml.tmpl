@@ -5,7 +5,9 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: "${alb_controller_irsa_arn}"
   name: alb-ingress-controller
-ingressClass:
+ingressClass: alb
+
+ingressClassParams:
   create: true
   name: alb
-  default: true
+  namespace: default
