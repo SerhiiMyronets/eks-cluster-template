@@ -1,0 +1,11 @@
+clusterName: my-eks-cluster
+vpcId: vpc-0c13ce1bb1d806252
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::058264369873:role/my-eks-cluster-alb-controller-irsa"
+  name: alb-ingress-controller1
+ingressClass:
+  create: true
+  name: alb
+  default: true
