@@ -12,3 +12,8 @@ output "alb-controller_role_arn" {
   value       = aws_iam_role.alb_controller.arn
   description = "IAM role ARN for ALB controller"
 }
+
+output "external_dns_role_arn" {
+  value       = aws_iam_role.external_dns_irsa.arn
+  description = "IAM role ARN for external dns controller"
+}

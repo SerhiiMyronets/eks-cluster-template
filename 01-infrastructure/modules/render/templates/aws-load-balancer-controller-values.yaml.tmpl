@@ -4,7 +4,7 @@ serviceAccount:
   create: true
   annotations:
     eks.amazonaws.com/role-arn: "${alb_controller_irsa_arn}"
-  name: alb-ingress-controller
+  name: aws-load-balancer-controller
 ingressClass: alb
 
 ingressClassParams:

@@ -9,8 +9,9 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
-resource "aws_route53_zone" "this" {
-  name = var.domain_name
+data "aws_route53_zone" "this" {
+  name         = var.domain_name
+  private_zone = false
 }
 
 resource "aws_route53_record" "this" {
@@ -22,11 +23,11 @@ resource "aws_route53_record" "this" {
     }
   }
 
-  zone_id = aws_route53_zone.this.zone_id
-  name    = each.value.name
-  type    = each.value.type
-  records = [each.value.record]
-  ttl     = 300
+  zone_id         = data.aws_route53_zone.this.zone_id
+  name            = each.value.name
+  type            = each.value.type
+  records         = [each.value.record]
+  ttl             = 300
   allow_overwrite = true
 }
 

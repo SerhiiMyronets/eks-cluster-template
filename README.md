@@ -40,4 +40,14 @@ helm upgrade --install external-secrets external-secrets/external-secrets \
   --values ./values/external-secrets-values.yaml
 ```
 
+## Install External DNS
+
+```bash
+helm upgrade --install external-dns bitnami/external-dns \
+  --namespace external-dns \
+  --create-namespace \
+  --version 8.9.2 \
+  --values values/external-dns-values.yaml
+```
+
 > Note: The necessary Helm repositories will be added automatically when these commands are run. No manual `helm repo add` is needed.

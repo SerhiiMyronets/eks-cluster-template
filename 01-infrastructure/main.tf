@@ -54,6 +54,8 @@ module "render" {
   alb_controller_irsa_arn   = module.irsa.alb-controller_role_arn
   cluster_name              = var.cluster_name
   vpc_id                    = module.vpc.vpc_id
+  external_dns_irsa_arn     = module.irsa.external_dns_role_arn
+  domain_name = var.domain_name
 }
 
 module "acm" {

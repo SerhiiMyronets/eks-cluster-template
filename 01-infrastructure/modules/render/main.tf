@@ -13,6 +13,11 @@ locals {
       cluster_name            = var.cluster_name
       vpc_id                  = var.vpc_id
     })
+
+    "external-dns-values.yaml" = templatefile("${path.module}/templates/external-dns-values.yaml.tmpl", {
+      external_dns_irsa_arn = var.external_dns_irsa_arn
+      domain_name          = var.domain_name
+    })
   }
 }
 
