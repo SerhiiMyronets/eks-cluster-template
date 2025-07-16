@@ -1,4 +1,4 @@
-variable "identifier" {}
+variable "cluster_name" {}
 variable "db_subnet_ids" {
   type = list(string)
 }
@@ -21,4 +21,10 @@ variable "rds_config" {
     instance_class    = string
     allocated_storage = number
   })
+}
+
+variable "enabled" {
+  description = "Whether to enable the RDS module"
+  type        = bool
+  default     = false
 }

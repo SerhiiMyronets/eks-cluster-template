@@ -71,6 +71,12 @@ variable "node_groups_config" {
   }
 }
 
+variable "enable_rds" {
+  description = "Whether to enable the RDS module"
+  type        = bool
+  default     = false
+}
+
 variable "rds_config" {
   description = "RDS configuration"
   type = object({

@@ -30,7 +30,9 @@ module "eks" {
 module "rds" {
   source = "./modules/rds"
 
-  identifier           = "${var.cluster_name}-db"
+  enabled = var.enable_rds
+
+  cluster_name         = var.cluster_name
   rds_config           = var.rds_config
   db_subnet_ids        = module.vpc.private_subnet_ids
   private_subnet_cidrs = var.private_subnet_cidrs
@@ -42,7 +44,7 @@ module "irsa" {
   cluster_name       = var.cluster_name
   oidc_provider_arn  = module.eks.oidc_provider_arn
   oidc_provider_url  = module.eks.oidc_provider_url
-  ssm_parameter_arns = module.rds.db_credential_arns
+  ssm_parameter_arns = var.enable_rds ? module.rds.db_credential_arns : []
 }
 
 module "karpenter" {
