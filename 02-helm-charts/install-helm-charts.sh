@@ -44,4 +44,11 @@ helm upgrade --install metrics-server metrics-server/metrics-server \
   --version 3.12.1 \
   --set args="{--kubelet-insecure-tls,--kubelet-preferred-address-types=InternalIP}"
 
+echo "🚀 Installing Karpenter..."
+helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter \
+  --namespace karpenter \
+  --create-namespace \
+  --version v0.35.0 \
+  --values ./values/karpenter-values.yaml
+
 echo "✅ All Helm charts installed successfully."

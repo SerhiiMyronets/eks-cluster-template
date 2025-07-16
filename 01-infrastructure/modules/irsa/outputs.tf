@@ -17,3 +17,8 @@ output "external_dns_role_arn" {
   value       = aws_iam_role.external_dns_irsa.arn
   description = "IAM role ARN for external dns controller"
 }
+
+output "karpenter_role_arn" {
+  value       = aws_iam_role.karpenter-irsa.arn
+  description = "IAM role ARN for karpenter"
+}

@@ -45,6 +45,11 @@ module "irsa" {
   ssm_parameter_arns = module.rds.db_credential_arns
 }
 
+module "karpenter" {
+  source       = "./modules/karpenter"
+  cluster_name = var.cluster_name
+}
+
 module "render" {
   source = "./modules/render"
 
@@ -52,10 +57,14 @@ module "render" {
   ebs_irsa_arn              = module.irsa.ebs_csi_role_arn
   external_secrets_irsa_arn = module.irsa.external-secrets_role_arn
   alb_controller_irsa_arn   = module.irsa.alb-controller_role_arn
+  external_dns_irsa_arn     = module.irsa.external_dns_role_arn
+  karpenter_irsa_arn        = module.irsa.karpenter_role_arn
+  instance_profile_name     = module.karpenter.instance_profile_name
+  interruption_queue_name   = module.karpenter.interruption_queue_name
+  cluster_endpoint          = module.eks.cluster_endpoint
   cluster_name              = var.cluster_name
   vpc_id                    = module.vpc.vpc_id
-  external_dns_irsa_arn     = module.irsa.external_dns_role_arn
-  domain_name = var.domain_name
+  domain_name               = var.domain_name
 }
 
 module "acm" {

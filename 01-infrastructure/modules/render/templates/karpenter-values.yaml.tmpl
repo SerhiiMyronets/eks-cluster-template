@@ -1,0 +1,11 @@
+serviceAccount:
+  create: false
+  name: karpenter
+  annotations:
+    eks.amazonaws.com/role-arn: ${karpenter_irsa_arn}
+
+clusterName: ${cluster_name}
+clusterEndpoint: ${cluster_endpoint}
+aws:
+  defaultInstanceProfile: ${instance_profile_name}
+  interruptionQueueName: ${interruption_queue_name}

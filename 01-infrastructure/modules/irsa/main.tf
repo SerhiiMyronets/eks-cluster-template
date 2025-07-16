@@ -125,3 +125,29 @@ resource "aws_iam_role_policy_attachment" "external_dns" {
   role       = aws_iam_role.external_dns_irsa.name
   policy_arn = aws_iam_policy.external_dns.arn
 }
+
+
+resource "aws_iam_role" "karpenter-irsa" {
+  name = "${var.cluster_name}-karpenter-irsa"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Federated = var.oidc_provider_arn
+      },
+      Action = "sts:AssumeRoleWithWebIdentity",
+      Condition = {
+        StringEquals = {
+          "${var.oidc_provider_url}:sub" = "system:serviceaccount:karpenter:karpenter"
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "this" {
+  name   = "${var.cluster_name}-karpenter-policy"
+  role   = aws_iam_role.karpenter-irsa.id
+  policy = file("${path.module}/iam_policies/karpenter_policy.json")
+}
