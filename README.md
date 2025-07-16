@@ -1,17 +1,29 @@
-# eks-cluster-template
-Terraform-based template for deploying a full-featured AWS EKS cluster with best practices and modular structure.
-
-# Helm Charts Installation
+## Helm Charts Installation
 
 After you create your infrastructure using the Terraform `render` module (step 1), the Helm `values.yaml` files are generated automatically and personalized for your environment. These files are stored in the `02-helm-charts/values` directory.
 
-To install the required Helm charts, **navigate to the `02-helm-charts` directory** and run the following commands:
+To install the required Helm charts:
 
-```bash
-cd 02-helm-charts
-```
+1. **Navigate to the Helm directory:**
 
-## Install AWS Load Balancer Controller
+   ```bash
+   cd 02-helm-charts
+   ```
+
+2. **Add Helm repositories and update them:**t
+
+   ```bash
+   helm repo add eks https://aws.github.io/eks-charts && \
+   helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver && \
+   helm repo add external-secrets https://charts.external-secrets.io && \
+   helm repo add bitnami https://charts.bitnami.com/bitnami && \
+   helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server && \
+   helm repo update
+   ```
+
+3. **Install the charts:**
+
+### Install AWS Load Balancer Controller
 
 ```bash
 helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
@@ -21,7 +33,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --values ./values/aws-load-balancer-controller-values.yaml
 ```
 
-## Install AWS EBS CSI Driver
+### Install AWS EBS CSI Driver
 
 ```bash
 helm upgrade --install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver \
@@ -30,7 +42,7 @@ helm upgrade --install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver 
   --values ./values/aws-ebs-csi-driver-values.yaml
 ```
 
-## Install External Secrets Operator
+### Install External Secrets Operator
 
 ```bash
 helm upgrade --install external-secrets external-secrets/external-secrets \
@@ -40,14 +52,22 @@ helm upgrade --install external-secrets external-secrets/external-secrets \
   --values ./values/external-secrets-values.yaml
 ```
 
-## Install External DNS
+### Install External DNS
 
 ```bash
 helm upgrade --install external-dns bitnami/external-dns \
   --namespace external-dns \
   --create-namespace \
   --version 8.9.2 \
-  --values values/external-dns-values.yaml
+  --values ./values/external-dns-values.yaml
 ```
 
-> Note: The necessary Helm repositories will be added automatically when these commands are run. No manual `helm repo add` is needed.
+### Install Metrics Server
+
+```bash
+helm upgrade --install metrics-server metrics-server/metrics-server \
+  --namespace kube-system \
+  --create-namespace \
+  --version 3.12.1 \
+  --set args="{--kubelet-insecure-tls,--kubelet-preferred-address-types=InternalIP}"
+```
